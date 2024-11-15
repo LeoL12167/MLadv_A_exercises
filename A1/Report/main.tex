@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[sorting=none]{biblatex}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\addbibresource{ref.bib}
+\setlength{\columnsep}{40pt}
+\setlength{\voffset}{0.7cm}
+\setlength{\headsep}{40pt}
+\geometry{legalpaper, portrait, margin=2cm}
+
+
+% Title page
+\title{Essay title\\\Large{Machine Learning, Advanced Course/DD2434/mladv24}}
+\author{Aurhor \\ KTH Royal Institute of Technology\\ School of Engineering Sciences in Chemistry, Biotechnology and Health}
+\date{\today}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{\textbf{Machine Learning, Advanced Course}\\\textbf{DD2434}}
+\fancyhead[R]{\textbf{Andrea Stanziale, Leonardo Lüder}\\ stanziale@kth.se, luder@kth.se}
+\fancyfoot{}
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+\clearpage
+\tableofcontents
+\thispagestyle{fancy}
+
+\clearpage
+% Begin page numbers
+\fancyfoot[C]{\thepage}
+\pagenumbering{arabic}
+\begin{multicols}{2}
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction} % For the contents page
+
+Name1 Surname1, Name2 Surname2, Name3 Surname3 
+KTH Royal Institute of Technology, School of ... 
+
+ 
+Contributions of the authors: 
+Name1 Surname1 made 10 cups of coffee. 
+Name2 Surname2 typed the text 
+Name3 Surname3 accumulated the reference list 
+
+
+
+The introduction summarizes background knowledge for your project. It should contain quite 
+a bit more than one would find in a scientific paper since it’s important that your reviewers 
+and the examiner can understand what your project is about. 
+
+
+
+Subdividing the introduction into different topics can add structure to the report. 
+The same is true for the following two sections. 
+
+
+
+Length and layout of the report 
+In total the report shouldn't contain more than about 10 pages of text. This does not include 
+figures, tables and equations. The reference list is not counted as text either. 
+The text should be written single spaced in some legible size 12 font, for example Times. 
+
+
+
+A citation, uses the ref.bib file.\cite{Beauchamp2015}
+Recommend \href{https://www.doi2bib.org/}{https://www.doi2bib.org/} for getting .bib style references to insert into the ref.bib file.
+
+\section*{Materials and Methods}
+\addcontentsline{toc}{section}{Materials and Methods}
+
+This section contains only information about what was done, how it was done and with what 
+instrumentation, algorithms, computer programs, chemicals and so on. 
+No results should be discussed here and nothing should be concluded. 
+It’s important that every author contributes to the project in a well defined way. 
+The contribution of each author has to be stated in detail on the first page of the report (see 
+above) and each author is expected to present at least their contribution and also answer 
+questions from the reviewers. 
+It’s best to use Equation Editor to write equations if you use Word. If you use another text 
+editor, such as Latex, you’ll know better than me what to do. 
+Equations that you refer to in the text should be numbered. 
+
+
+\section*{Results (and discussion)}
+\addcontentsline{toc}{section}{Results (and discussion)}
+
+This is where the results are presented and can also be discussed, but discussion can also be 
+kept for the next section. Do what seems more natural for your text. 
+Figures and tables should be numbered and have captions and have to be referred to and 
+explained a bit more in the text. 
+A figure caption is located below the figure a table caption above the table. 
+Use something like Endnote to organize your references and format them as (name, year) in 
+the text so that they are in alphabetical order in the reference list. 
+
+
+\paragraph{Paragraphs} are often helpful.
+
+\section*{Discussions (and conclusions)}
+\addcontentsline{toc}{section}{Discussions (and conclusions)}
+
+Here you discuss your results and their limitations and present conclusions if possible.
+
+\end{multicols}
+\clearpage
+\addcontentsline{toc}{section}{References}
+\printbibliography
+
+\end{document}
