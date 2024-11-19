@@ -25,7 +25,7 @@
 \pagestyle{fancy}
 \fancyhead{}
 \fancyhead[L]{\textbf{Machine Learning, Advanced Course}\\\textbf{DD2434}}
-\fancyhead[R]{\textbf{Andrea Stanziale, Leonardo Lüder}\\ stanziale@kth.se, luder@kth.se}
+\fancyhead[R]{\textbf{Andrea Stanziale, Leonardo Lüder}\\ stanz@kth.se, luder@kth.se}
 \fancyfoot{}
 \begin{document}
 
@@ -72,6 +72,53 @@
     \end{figure}
 
     We see that the more datapoints we have the more the histogram resembles a normal distribution which is as expected.
+
+    \subsection{1.2.8}
+
+    We derive the ML estimates for $\mu$ and $\tau$. 
+    The posterior distribution is proportional to the product of the likelihood and the prior:
+
+\begin{equation}
+    p(\mu, \tau | X) \propto p(X | \mu, \tau) p(\mu | \tau) p(\tau)
+\end{equation}
+    
+
+
+    The likelihood is given by:
+
+    \begin{equation}
+    p(X | \mu, \tau) = \prod_{i=1}^{N} p(X_i | \mu, \tau) = \prod_{i=1}^{N} \sqrt{\frac{\tau}{2 \pi}} e^{-\frac{\tau}{2} (X_i - \mu)^2}
+    \end{equation}
+
+    where we assume \( X_i | \mu, \tau \sim N(\mu, \frac{1}{\tau}) \).
+
+    The prior distributions are:
+
+    \begin{equation}
+    p(\mu | \tau) = N(\mu_0, \frac{1}{\lambda_0 \tau}); \quad p(\tau) = \mathrm{Gamma}(\alpha_0, \beta_0)
+    \end{equation}
+
+
+    This gives the joint posterior:
+
+    \begin{equation}
+    p(\mu, \tau | X) \propto \prod_{i=1}^{N} \sqrt{\frac{\tau}{2 \pi}} e^{-\frac{\tau}{2} (X_i - \mu)^2} \times \sqrt{\frac{\lambda_0 \tau}{2 \pi}} e^{-\frac{\lambda_0 \tau}{2} (\mu - \mu_0)^2} \times \frac{\beta_0^{\alpha_0}}{\Gamma(\alpha_0)} \tau^{\alpha_0 - 1} e^{-\beta_0 \tau}
+    \end{equation}
+
+    Simplifying, we get:
+
+    \begin{equation}
+    p(\mu, \tau | X) \propto \left(\frac{\tau}{2 \pi}\right)^{\frac{N+1}{2}} e^{-\frac{\tau}{2} \left(\sum_{i=1}^{N} (X_i - \mu)^2 + \lambda_0 (\mu - \mu_0)^2 + 2 \beta_0 \right)} \tau^{\alpha_0 + \frac{N}{2} - 1}
+    \end{equation}
+
+
+    After completing the square for terms involving \( \mu \) and simplifying, the posterior distribution of \( \mu \) given \( X \) and \( \tau \) is:
+
+    \begin{equation}
+    p(\mu | X, \tau) \sim N\left(\frac{\sum X_i + \lambda_0 \mu_0}{N + \lambda_0}, \frac{1}{(N + \lambda_0) \tau}\right)
+    \end{equation}
+
+
 
 
 \end{multicols}
