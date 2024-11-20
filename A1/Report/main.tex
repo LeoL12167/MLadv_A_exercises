@@ -10,6 +10,7 @@
 \usepackage[sorting=none]{biblatex}
 \usepackage{fancyhdr}
 \usepackage{multicol}
+\usepackage{enumitem}
 \addbibresource{ref.bib}
 \setlength{\columnsep}{40pt}
 \setlength{\voffset}{0.7cm}
@@ -31,19 +32,15 @@
 \begin{document}
 
 \maketitle
-\thispagestyle{fancy}
-\clearpage
-\tableofcontents
-\thispagestyle{fancy}
 
-\clearpage
 % Begin page numbers
 \fancyfoot[C]{\thepage}
 \pagenumbering{arabic}
 \begin{multicols}{2}
 
     \section*{1.1}
-    \begin{itemize}
+    The answers to the questions are as follows:
+    \begin{itemize}[noitemsep, topsep=0pt]
         \item Yes.
         \item No.
         \item Yes.
