@@ -1,0 +1,66 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{Beauchamp2015}{incollection}{}
+      \name{author}{2}{}{%
+        {{hash=e3b58a37a81ebeee8390fc2317d039e3}{%
+           family={Beauchamp},
+           familyi={B\bibinitperiod},
+           given={Tom\bibnamedelima L.},
+           giveni={T\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=f404e0289a72eaaa5dd3df489a45b144}{%
+           family={Rauprich},
+           familyi={R\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer International Publishing}%
+      }
+      \strng{namehash}{f4fcdb248cdb4c5a24e7db92b0ab6446}
+      \strng{fullhash}{f4fcdb248cdb4c5a24e7db92b0ab6446}
+      \strng{bibnamehash}{f4fcdb248cdb4c5a24e7db92b0ab6446}
+      \strng{authorbibnamehash}{f4fcdb248cdb4c5a24e7db92b0ab6446}
+      \strng{authornamehash}{f4fcdb248cdb4c5a24e7db92b0ab6446}
+      \strng{authorfullhash}{f4fcdb248cdb4c5a24e7db92b0ab6446}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Encyclopedia of Global Bioethics}
+      \field{title}{Principlism}
+      \field{year}{2015}
+      \field{pages}{1\bibrangedash 12}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1007/978-3-319-05544-2_348-1
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/978-3-319-05544-2_348-1
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/978-3-319-05544-2_348-1
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
