@@ -10,4 +10,5 @@
 *.bbl
 *.blg
 *.pdf
-*.bbl*
+main.pdf
+*.bbl-SAVE-ERROR
