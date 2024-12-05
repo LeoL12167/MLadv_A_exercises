@@ -62,15 +62,55 @@
 \section*{2.3 BBVI}
 In BBVI without Rao-Blackwellization and control variates, the gradient is estimated using Monte Carlo sampling, the score function of \(q\), and the joint of \(p\).
 
-
 \subsection*{Question 2.3.9}
-Let \(X = (X_1, \dots, X_N)\) be i.i.d. with \(X_n | \theta, \sigma^2 \sim \mathcal{N}(\theta, \sigma^2)\), \(\theta \sim \text{LogNormal}(\nu, \epsilon^2)\), and \(\sigma^2\) fixed. Write an expression for the Naive BBVI gradient estimate w.r.t. \(\alpha\) using one sample \(z \sim q(\theta)\), \(q(\theta) = \text{Gamma}(\alpha, \beta)\). (2 points)
+Let \(X = (X_1, \dots, X_N)\) be i.i.d.\ with \(X_n | \theta, \sigma^2 \sim \mathcal{N}(\theta, \sigma^2)\), \(\theta \sim \text{LogNormal}(\nu, \epsilon^2)\), and \(\sigma^2\) fixed. Write an expression for the Naive BBVI gradient estimate w.r.t.\ \(\alpha\) using one sample \(z \sim q(\theta)\), \(q(\theta) = \text{Gamma}(\alpha, \beta)\). (2 points)\bigskip 
 
+We write the ELBO as:
+\begin{align*}
+    \mathbb{L} = \mathbb{E}_{q(\theta)}\left[\log p(X, \theta) - \log q(\theta)\right].
+\end{align*}
+We compute the gradient of the ELBO w.r.t.\ \(\alpha\) using the score function estimator:
+\begin{align*}
+    \nabla_\alpha \mathbb{L} &= \mathbb{E}_{q(\theta)}\left[(\log p(X, \theta) - \log q(\theta)) \nabla_\alpha \log q(\theta) \right].
+\end{align*}
+We take the Monte Carlo estimate of the gradient:
+\begin{align*}
+    \nabla_\alpha \mathbb{L} &\approx \widehat{\nabla_\alpha \mathbb{L}} = \frac{1}{S}\sum_{s=1}^{S}(\log p(X, z_s) - \log q(z_s)) \nabla_\alpha \log q(z_s),
+\end{align*}
+where \(z_s \sim q(\theta)\). As we take one sample only, this expression simplifies to:
+\begin{align*}
+    \widehat{\nabla_\alpha \mathbb{L}} = (\log p(X, z_1) - \log q(z_1)) \nabla_\alpha \log q(z_1),
+\end{align*}
+with \(z_1 \sim q(\theta)\).
+
+For the variational distribution \(q(\theta)\), with \(q(\theta) = \text{Gamma}(\alpha, \beta)\), we have:
+\begin{align*}
+    \log q(\theta) &= (\alpha - 1)\log \theta - \theta \beta - \log \Gamma(\alpha) + \alpha \log \beta, \\
+    \nabla_\alpha \log q(\theta) &= \log(\theta) - \psi(\alpha) + \log(\beta),
+\end{align*}
+where \(\psi(\alpha)\) is the digamma function.
+
+For the log-joint \(\log p(X, \theta)\), we have:
+\begin{align*}
+    \log p(X, \theta) &= \sum_{n=1}^{N} \log p(X_n \mid \theta) + \log p(\theta), \\
+    \log p(X_n \mid \theta) &= -\frac{1}{2} \log(2\pi\sigma^2) - \frac{(X_n - \theta)^2}{2\sigma^2}, \\
+    \log p(\theta) &= -\log(\theta \epsilon \sqrt{2\pi}) - \frac{(\log \theta - \nu)^2}{2\epsilon^2}.
+\end{align*}
+
+The Monte Carlo estimate of the gradient becomes:
+\begin{align*}
+    \widehat{\nabla_\alpha \mathbb{L}} &= \Bigg[\sum_{n=1}^N \Big(-\frac{(X_n - \theta)^2}{2\sigma^2} - \frac{1}{2} \log(2\pi\sigma^2)\Big) \\&
+    - \log(\theta \epsilon \sqrt{2\pi}) - \frac{(\log(\theta) - \nu)^2}{2\epsilon^2} \\
+    &- (\alpha - 1)\log \theta + \theta \beta + \log \Gamma(\alpha) - \alpha \log \beta \Bigg]\\& \cdot (\log \theta - \psi(\alpha) + \log \beta).
+\end{align*}
 
 \subsection*{Question 2.3.10}
-Describe in one sentence what Rao-Blackwellization is used for in the BBVI paper. (1 point)
+Describe in one sentence what Rao-Blackwellization is used for in the BBVI paper. (1 point)\bigskip 
 
-\subsection{Question 2.3.11}
+In the BBVI paper, Rao-Blackwellization is used to reduce the variance of the random variables used to estimate the ELBO's gradient by replacing them with their conditional expectations given variables outside of their Markov blanket.
+
+
+\subsection*{Question 2.3.11}
 Given the model in figure 2, and the mean-field approximation:  
 \[
 q(y, w, z, v) = q_\lambda^1(w)q_\lambda^2(z)q_\lambda^3(v)\prod_n q_\lambda^4(y_n),
