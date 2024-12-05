@@ -19,7 +19,7 @@
 
 
 % Title page
-\title{Essay title\\\Large{Machine Learning, Advanced Course/DD2434/mladv24}}
+\title{HW A2\\\Large{Machine Learning, Advanced Course/DD2434/mladv24}}
 \author{Aurhor \\ KTH Royal Institute of Technology\\ School of Engineering Sciences in Chemistry, Biotechnology and Health}
 \date{\today}
 
@@ -57,6 +57,32 @@
 
     \subsection*{2.2.3}
     
+
+
+\section*{2.3 BBVI}
+In BBVI without Rao-Blackwellization and control variates, the gradient is estimated using Monte Carlo sampling, the score function of \(q\), and the joint of \(p\).
+
+
+\subsection*{Question 2.3.9}
+Let \(X = (X_1, \dots, X_N)\) be i.i.d. with \(X_n | \theta, \sigma^2 \sim \mathcal{N}(\theta, \sigma^2)\), \(\theta \sim \text{LogNormal}(\nu, \epsilon^2)\), and \(\sigma^2\) fixed. Write an expression for the Naive BBVI gradient estimate w.r.t. \(\alpha\) using one sample \(z \sim q(\theta)\), \(q(\theta) = \text{Gamma}(\alpha, \beta)\). (2 points)
+
+
+\subsection*{Question 2.3.10}
+Describe in one sentence what Rao-Blackwellization is used for in the BBVI paper. (1 point)
+
+\subsection{Question 2.3.11}
+Given the model in figure 2, and the mean-field approximation:  
+\[
+q(y, w, z, v) = q_\lambda^1(w)q_\lambda^2(z)q_\lambda^3(v)\prod_n q_\lambda^4(y_n),
+\]
+describe qualitatively how the Rao-Blackwellized partial gradient of the ELBO w.r.t. \(\lambda_n^4\), \(\nabla_{\lambda_n^4} \mathcal{L}\), is obtained. Write out the final expression for the Rao-Blackwellized \(\nabla_{\lambda_n^4} \mathcal{L}\). (2 points)
+
+
+
+
+
+
+
 \end{multicols}
 
 \clearpage
