@@ -47,16 +47,34 @@
         \item Beta
     \end{enumerate}
     \section*{2.2}
-    \subsection*{2.2.1} 
+    \subsection*{2.2.5} 
     The definition given of the local hidden variables is that they must be dependent
     only on other local variables of the local context and the global variables, that is:
     \begin{align}
-        p(z_{d_i,n} = k |\theta_d, \beta, w_{d,n}) = p(z_{d_i,n} = k | \theta_{d_i}, \beta, w_{d_i,n})
+        p(z_{d}|\theta_{-d}, \beta, \alpha, w_{-d}) = p(z_{d} | \beta, \alpha)
     \end{align}
-    \subsection*{2.2.2}
+    \subsection*{2.2.6}
 
-    \subsection*{2.2.3}
+
+
+
+
+    \subsection*{2.2.7}
+
+    The ELBO for the LDA is defined, according to Blei et al. \cite{blei2009visualizing} as:
     
+    \begin{equation}
+        \begin{aligned}
+            \mathcal{L} &= \sum_{k=1}^{K} \mathbb{E}[\log p(\beta_k | \eta)]+\sum_{d=1}^{D} \mathbb{E}[\log p(\theta_d | \alpha)] \\
+            &+ \sum_{d=1}^{D} \sum_{n=1}^{N} \mathbb{E}[\log p(z_{d,n} | \theta_d)] \\
+            &+ \sum_{z=1}^{Z} \sum_{n=1}^{N} \mathbb{E}[\log p(w_{d,n} | z_{d,n}, \beta_{1:K})] + \mathcal{H}(\mathbf{g})
+        \end{aligned}
+    \end{equation}
+
+    \subsection*{2.2.8}
+
+    The runtime of the SVI algorithm was found to be around 1.5 to 3 times faster than the CAVI updates, on the flip side, the ELBO was lower
+    than the one of the CAVI algorithm, the values of $E[\theta]$ and $E[\beta]$ were also generally closer for the CAVI algorithm.    
 
 
 \section*{2.3 BBVI}
@@ -127,6 +145,6 @@ describe qualitatively how the Rao-Blackwellized partial gradient of the ELBO w.
 
 \clearpage
 \addcontentsline{toc}{section}{References}
-% \printbibliography{}
+\printbibliography{}
 
 \end{document}
