@@ -61,7 +61,7 @@
 
     \subsection*{2.1.4}
     $p(x|\theta) = \exp( (\psi_1 - 1) \log x + (\psi_2-1)\log(1-x) - log\Gamma(\psi_1)-\log(\Gamma(\psi_2))+\log \Gamma(\psi_1+\psi_2))$
-    whixh can be written as $p(x|\theta) = x^{\psi_1-1}(1-x)^{psi_2-1} \Gamma(\psi_1)\Gamma(\psi_2)\Gamma^{-1}(\psi_1\psi_2)$ which
+    whixh can be written as $p(x|\theta) = x^{\psi_1-1}(1-x)^{\psi_2-1} \Gamma(\psi_1)\Gamma(\psi_2)\Gamma^{-1}(\psi_1+\psi_2)$ which
     represents a beta distribution.
     \section*{2.2}
     \subsection*{2.2.5} 
@@ -80,9 +80,9 @@
 
     We decompose the terms, by using, that:
     \begin{align*}
-    p(z | \theta) = \prod_{d=1}^D \prod_{n=1}^N p(z_{d,n} | \theta_d),
-    p(z | \theta) = \prod_{d=1}^D \prod_{n=1}^N p(z_{d,n} | \theta_d),
-    p(w | z, \beta) = \prod_{d=1}^D \prod_{n=1}^N p(w_{d,n} | z_{d,n}, \beta).
+    p(z | \theta) &= \prod_{d=1}^D \prod_{n=1}^N p(z_{d,n} | \theta_d), \\
+    p(z | \theta) &= \prod_{d=1}^D \prod_{n=1}^N p(z_{d,n} | \theta_d), \\
+    p(w | z, \beta) &= \prod_{d=1}^D \prod_{n=1}^N p(w_{d,n} | z_{d,n}, \beta).
     \end{align*}
 
     We find the factorized joint distribution as:
