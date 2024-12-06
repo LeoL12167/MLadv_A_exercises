@@ -133,10 +133,29 @@ Given the model in figure 2, and the mean-field approximation:
 \[
 q(y, w, z, v) = q_\lambda^1(w)q_\lambda^2(z)q_\lambda^3(v)\prod_n q_\lambda^4(y_n),
 \]
-describe qualitatively how the Rao-Blackwellized partial gradient of the ELBO w.r.t. \(\lambda_n^4\), \(\nabla_{\lambda_n^4} \mathcal{L}\), is obtained. Write out the final expression for the Rao-Blackwellized \(\nabla_{\lambda_n^4} \mathcal{L}\). (2 points)
+describe qualitatively how the Rao-Blackwellized partial gradient of the ELBO w.r.t. \(\lambda_n^4\), \(\nabla_{\lambda_n^4} \mathcal{L}\), is obtained. Write out the final expression for the Rao-Blackwellized \(\nabla_{\lambda_n^4} \mathcal{L}\). (2 points)\bigskip
 
+We have the ELBO as:
+\begin{align*}
+    \mathcal{L} = \mathbb{E}_{q_\lambda}\left[\log p(y, w, z, v) - \log q_\lambda(y, w, z, v)\right].
+\end{align*}
+and its gradient with respect to \(\lambda_n^4\):
+\begin{align*}
+    \nabla_{\lambda_n^4}\mathcal{L} = \mathbb{E}_{q_\lambda}\left[\nabla_{\lambda_4}(\log p(y, w, z, v) - \log q_\lambda(y, w, z, v))\right].
+\end{align*}
 
+with the score function form:
 
+\begin{align*}
+    \nabla_{\lambda_n^4}\mathcal{L} =& \mathbb{E}_{q_\lambda(w,z,v,y_n)}\left[(\log p(y_n|w,z,v)-\right.\\&\left.\log q_{\lambda_n^4}(y_n))\,\nabla_{\lambda_n^4}\log q_{\lambda_n^4}(y_n)\right].
+\end{align*}
+
+Without Rao-Blackwellization, this would be approximated by sampling $y_n, w,z,v$.
+Instead of sampling $y_n$, we integrate it out analytically, resulting in the final expression:
+\begin{align*}
+    \nabla_{\lambda_n^4}\mathcal{L} 
+    =& \mathbb{E}_{q_\lambda(w,z,v)}\left[\int q_{\lambda_n^4}(y_n) (\log p(y_n|w,z,v)-\right.\\&\left.\log q_{\lambda_n^4}(y_n)) \nabla_{\lambda_n^4}\log q_{\lambda_n^4}(y_n)\,dy_n\right].
+\end{align*}
 
 
 
