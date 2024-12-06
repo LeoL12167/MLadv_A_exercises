@@ -40,12 +40,29 @@
 
     \section*{2.1}
     The answers to the questions are as follows:
-    \begin{enumerate}[noitemsep, topsep=0pt]
-        \item Bernoulli
-        \item Gamma
-        \item Log-normal
-        \item Beta
-    \end{enumerate}
+
+    \subsection*{2.1.1}
+    $p(x|\theta) = \text{exp}(\log \frac{p}{1-p} x -\log(frac{1}{1-p}))$ which simplifies to $p(x|\theta) =p^x(1-p)^{1-x}$
+    which is the Bernoulli distribution.
+
+    \subsection*{2.1.2}
+    $p(x|\theta) = \text{exp}((\alpha-1)\log x - \beta x - \log \Gamma (\alpha)-(\alpha)\log(\beta))$ which corresponds to
+    $p(x|\theta) = x^{\alpha-1} e^{-\beta x} \Gamma(\alpha)^{-1}\beta^{-\alpha}$  which is the Gamma distribution.
+
+    \subsection*{2.1.3}
+    $p(x|\theta) = \frac{1}{x \sqrt{2\pi}} \exp (\frac{\mu}{\sigma^2} \log x - \frac{1}{2\sigma^2} (\log x)^2 + \frac{\mu^2}{2 \sigma^2} - \frac{1}{2} \log (\frac{1}{\sigma^2})) $ this simplifies to
+    \begin{equation*}
+        \begin{aligned}
+            p(x|\theta) &= \frac{1}{\sigma x \sqrt{2\pi}} \cdot \\
+            &\exp {-\frac{(\log x - \mu)^2}{2 \sigma^2}}
+        \end{aligned}    
+    \end{equation*}
+    which is the log-normal distribution.
+
+    \subsection*{2.1.4}
+    $p(x|\theta) = \exp( (\psi_1 - 1) \log x + (\psi_2-1)\log(1-x) - log\Gamma(\psi_1)-\log(\Gamma(\psi_2))+\log \Gamma(\psi_1+\psi_2))$
+    whixh can be written as $p(x|\theta) = x^{\psi_1-1}(1-x)^{psi_2-1} \Gamma(\psi_1)\Gamma(\psi_2)\Gamma^{-1}(\psi_1\psi_2)$ which
+    represents a beta distribution.
     \section*{2.2}
     \subsection*{2.2.5} 
     The definition given of the local hidden variables is that they must be dependent
