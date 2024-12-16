@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[sorting=none]{biblatex}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage{enumitem}
+\addbibresource{ref.bib}
+\setlength{\columnsep}{40pt}
+\setlength{\voffset}{0.7cm}
+\setlength{\headsep}{40pt}
+\geometry{legalpaper, portrait, margin=2cm}
+
+
+% Title page
+\title{HW A2\\\Large{Machine Learning, Advanced Course/DD2434/mladv24}}
+\author{Aurhor \\ KTH Royal Institute of Technology\\ School of Engineering Sciences in Chemistry, Biotechnology and Health}
+\date{\today}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{\textbf{Machine Learning, Advanced Course}\\\textbf{DD2434}}
+\fancyhead[R]{\textbf{Andrea Stanziale, Leonardo Lüder}\\ stanz@kth.se, luder@kth.se}
+\fancyfoot{}
+\begin{document}
+
+\maketitle
+
+% Begin page numbers
+\fancyfoot[C]{\thepage}
+\pagenumbering{arabic}
+\begin{multicols}{2}
+
+   
+\end{multicols}
+
+\clearpage
+\addcontentsline{toc}{section}{References}
+\printbibliography{}
+
+\end{document}
