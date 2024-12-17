@@ -42,12 +42,26 @@
 
     \noindent \textbf{Question 3.1.1:}  
     \textit{Explain why this data-centering step is required while performing PCA. What could be an undesirable effect if we perform PCA on non-centered data?}  
-
-    \vspace{0.5cm}
+    Data centering is required to ensure that the first principal component is the direction of maximum variance. If the data is not centered, 
+    the first principal component will be the direction that best fits the data, which is not necessarily the direction of maximum variance, but it may be 
+    skewed by the mean.
+    This is because the data is not centered around the origin, and the origin is not the center of mass of the data. 
 
     \noindent \textbf{Question 3.1.2:}  
     \textit{Does the previous argument imply that a \textbf{single} SVD operation is sufficient to perform PCA both on the rows and the columns of a data matrix? Justify your answer.}  
+    Yes. The SVD for $X$ is:
 
+    \begin{equation*}
+        X = U \Sigma V^T
+    \end{equation*}
+
+    the SVD for $X^T$ is then simply:
+
+    \begin{equation*}
+        X^T = (U \Sigma V^T)^T = V \Sigma^T U^T
+    \end{equation*}
+
+     Therefore, the principal components of $X$ and $X^T$ can be computed with one SVD operation.
     \vspace{0.5cm}
 
     \noindent \textbf{Question 3.1.3:}  
@@ -55,7 +69,31 @@
     \[
     \text{Var}(\mathcal{Y}) = \sum_{i=1}^d \sigma_i^2.
     \]
+    We have that the mean of the data is zero, so the variance is given by:
 
+    \begin{equation*}
+        \text{Var}(\mathcal{Y})= \sum_{i=1}^{n}||x_i||_2^2
+    \end{equation*}
+    if we represent the dataset in a matrix $Y = \begin{bmatrix}
+        y_1 & \cdots & y_n
+    \end{bmatrix}$ the variance can then be expressed as the trace of $Y^TY$:
+    \begin{equation*}
+        \text{Var}(Y) =\text{Tr}(Y^TY).
+    \end{equation*}
+    Consider now the SVD of $Y$:
+
+    \begin{equation*}
+        Y = U \Sigma V^T.
+    \end{equation*}
+    So we have that the variance is:
+    \begin{equation*}
+        \text{Var}(Y) =\text{Tr}((U \Sigma V^T)^TU \Sigma V^T) = \text{Tr}(V \Sigma U^T U \Sigma V^T)
+    \end{equation*}
+    by orthonormality of $U$ and $V$ , we have $U^TU=I$, $V^TV=I$. Furthermore, we know that the trace is invariant under cyclic 
+    operations. So the equation above simplifies to:
+    \begin{equation*}
+        \text{Var}(Y) = \text{Tr}(\Sigma^T \Sigma) = \sum_{i=1}^{d} \sigma_i^2
+    \end{equation*} 
     \vspace{0.5cm}
 
     \noindent \textbf{Question 3.1.4:}  
@@ -65,13 +103,56 @@
     \]
 
     \vspace{0.5cm}
+    Now we have that the variance of the projected data is given by:
+    \begin{equation*}
+        \text{Var}(\mathcal{X}) = \sum_{i=1}^{n}||x_i||_2^2
+    \end{equation*}    
+    we again represent the dataset in a matrix:
+    \(X = \begin{bmatrix}
+         x_1 & \cdots & x_n 
+        \end{bmatrix}\), and we follow the same argument that we made before to write  $\text{Var}(X)=\text{Tr}(XX^T)$.
+    Writing $Y = U \Sigma V^T$, the projected data is given by $X = W^T U \Sigma V^T$.
 
+    
+    Since $W$ is the first $k$ columns of $U$, we have that $X=U^T_kU\Sigma V^T$. We notice now 
+    that we are selecting the first $k$ singular values of $\Sigma$, so we have:
+    \begin{equation*}
+        X = U^T_kU\Sigma_kV^T = \Sigma_kV^T 
+    \end{equation*}
+    by orthonormality of $U$. Then we compute:
+    \begin{equation*}
+        \text{Var}(X) = \text{Tr}(XX^T) = \text{Tr}(\Sigma_k \Sigma_k^T) = \sum_{i=1}^k\sigma_i^2.
+    \end{equation*}
     \noindent \textbf{Question 3.1.5:}  
     \textit{Show that the variance of the residual data \( \mathcal{Z} \) is given by}  
     \[
     \text{Var}(\mathcal{Z}) = \sum_{i=k+1}^d \sigma_i^2.
     \]
-
+    We have that $Z = Y - WW^TY$, so, recalling that $W=U_k$, we have:
+    \begin{equation*}
+        Z =U \Sigma V^T - U_kU_k^TU\Sigma V^T
+    \end{equation*}
+    we know that $U_kU_k^T$ is the orthogonal projection onto the column space of $U_k$. Then we can write:
+    \begin{equation*}
+        Z = (I_d - U_kU_k^T)U \Sigma V_T.
+    \end{equation*}
+    We now write $U = \begin{bmatrix}
+        U_k & U_{d-k}
+    \end{bmatrix}$. It follows that  $I_d - U_kU_k^T = UU^T - U_kU_k^T  = U_{d-k}U_{d-k}^T$, which is the orthogonal projection onto the column space of $U_{d-k}$. We then have:
+    \begin{equation*}
+        Z = U_{d-k}U_{d-k}^TU \Sigma V^T = U_{d-k}\begin{bmatrix}
+            0 & I_{d-k}
+        \end{bmatrix} \Sigma V^T
+    \end{equation*}
+    which simplifies to:
+    \begin{equation*}
+        Z = U_{d-k} \Sigma_{d-k} V^T.
+    \end{equation*}
+    Then, we can make the same argument as in Question 3.1.3 to show the claim. 
+    Then it can be seen that:
+    \begin{equation*}
+        \text{Var}(\mathcal{Y}) = \sum_{i=1}^d \sigma_i^2=  \sum_{i=1}^k \sigma_i^2 + \sum_{d-k=1}^d \sigma_i^2 =\text{Var}(\mathcal{X}) +\text{Var}(\mathcal{Z})
+    \end{equation*}
     \newpage
 
     \section{Classifying Non-Linearly-Separable Data with a Linear Classifier}
@@ -80,7 +161,7 @@
     \textit{Explain in detail how to achieve step 1 above, i.e., how to map the data into a two-dimensional space so that they become linearly separable. Write down all the steps of your proposed method. Start with a two-dimensional representation of the data in the original (non-linearly-separable) space, and explain how to obtain a mapping into the two-dimensional (linearly-separable) space.}
     
     \textbf{Answer:}
-    We see, that the data is of a circular shape and that it is perfectly seperable by a circle. We will denote the data points as $x_i$. First we compute the data's centeroid with:
+    We see, that the data is of a circular shape and that it is perfectly separable by a circle. We will denote the data points as $x_i$. First we compute the data's centeroid with:
     \begin{equation*}
         \mathbf{m} = \frac{1}{N} \sum_{i=1}^N \mathbf{x}_i.
     \end{equation*}
@@ -207,3 +288,4 @@
 % \printbibliography{}
 
 \end{document}
+
