@@ -1,0 +1,291 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[sorting=none]{biblatex}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage{enumitem}
+\addbibresource{ref.bib}
+\setlength{\columnsep}{40pt}
+\setlength{\voffset}{0.7cm}
+\setlength{\headsep}{40pt}
+\geometry{legalpaper, portrait, margin=2cm}
+
+
+% Title page
+\title{HW A2\\\Large{Machine Learning, Advanced Course/DD2434/mladv24}}
+\author{Author \\ KTH Royal Institute of Technology\\ School of Engineering Sciences in Chemistry, Biotechnology and Health}
+\date{\today}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{\textbf{Machine Learning, Advanced Course}\\\textbf{DD2434}}
+\fancyhead[R]{\textbf{Andrea Stanziale, Leonardo Lüder}\\ stanz@kth.se, luder@kth.se}
+\fancyfoot{}
+\begin{document}
+
+\maketitle
+
+% Begin page numbers
+\fancyfoot[C]{\thepage}
+\pagenumbering{arabic}
+\begin{multicols}{2}
+
+    \section{Principal Component Analysis}
+
+    \noindent \textbf{Question 3.1.1:}  
+    \textit{Explain why this data-centering step is required while performing PCA. What could be an undesirable effect if we perform PCA on non-centered data?}  
+    Data centering is required to ensure that the first principal component is the direction of maximum variance. If the data is not centered, 
+    the first principal component will be the direction that best fits the data, which is not necessarily the direction of maximum variance, but it may be 
+    skewed by the mean.
+    This is because the data is not centered around the origin, and the origin is not the center of mass of the data. 
+
+    \noindent \textbf{Question 3.1.2:}  
+    \textit{Does the previous argument imply that a \textbf{single} SVD operation is sufficient to perform PCA both on the rows and the columns of a data matrix? Justify your answer.}  
+    Yes. The SVD for $X$ is:
+
+    \begin{equation*}
+        X = U \Sigma V^T
+    \end{equation*}
+
+    the SVD for $X^T$ is then simply:
+
+    \begin{equation*}
+        X^T = (U \Sigma V^T)^T = V \Sigma^T U^T
+    \end{equation*}
+
+     Therefore, the principal components of $X$ and $X^T$ can be computed with one SVD operation.
+    \vspace{0.5cm}
+
+    \noindent \textbf{Question 3.1.3:}  
+    \textit{Show that the variance of the dataset \( \mathcal{Y} \), as defined in Equation (1), can be expressed as a function of the singular values of \( \mathbf{Y} \), and in particular}  
+    \[
+    \text{Var}(\mathcal{Y}) = \sum_{i=1}^d \sigma_i^2.
+    \]
+    We have that the mean of the data is zero, so the variance is given by:
+
+    \begin{equation*}
+        \text{Var}(\mathcal{Y})= \sum_{i=1}^{n}||x_i||_2^2
+    \end{equation*}
+    if we represent the dataset in a matrix $Y = \begin{bmatrix}
+        y_1 & \cdots & y_n
+    \end{bmatrix}$ the variance can then be expressed as the trace of $Y^TY$:
+    \begin{equation*}
+        \text{Var}(Y) =\text{Tr}(Y^TY).
+    \end{equation*}
+    Consider now the SVD of $Y$:
+
+    \begin{equation*}
+        Y = U \Sigma V^T.
+    \end{equation*}
+    So we have that the variance is:
+    \begin{equation*}
+        \text{Var}(Y) =\text{Tr}((U \Sigma V^T)^TU \Sigma V^T) = \text{Tr}(V \Sigma U^T U \Sigma V^T)
+    \end{equation*}
+    by orthonormality of $U$ and $V$ , we have $U^TU=I$, $V^TV=I$. Furthermore, we know that the trace is invariant under cyclic 
+    operations. So the equation above simplifies to:
+    \begin{equation*}
+        \text{Var}(Y) = \text{Tr}(\Sigma^T \Sigma) = \sum_{i=1}^{d} \sigma_i^2
+    \end{equation*} 
+    \vspace{0.5cm}
+
+    \noindent \textbf{Question 3.1.4:}  
+    \textit{Show that the variance of the projected data \( \mathcal{X} \) is given by}  
+    \[
+    \text{Var}(\mathcal{X}) = \sum_{i=1}^k \sigma_i^2.
+    \]
+
+    \vspace{0.5cm}
+    Now we have that the variance of the projected data is given by:
+    \begin{equation*}
+        \text{Var}(\mathcal{X}) = \sum_{i=1}^{n}||x_i||_2^2
+    \end{equation*}    
+    we again represent the dataset in a matrix:
+    \(X = \begin{bmatrix}
+         x_1 & \cdots & x_n 
+        \end{bmatrix}\), and we follow the same argument that we made before to write  $\text{Var}(X)=\text{Tr}(XX^T)$.
+    Writing $Y = U \Sigma V^T$, the projected data is given by $X = W^T U \Sigma V^T$.
+
+    
+    Since $W$ is the first $k$ columns of $U$, we have that $X=U^T_kU\Sigma V^T$. We notice now 
+    that we are selecting the first $k$ singular values of $\Sigma$, so we have:
+    \begin{equation*}
+        X = U^T_kU\Sigma_kV^T = \Sigma_kV^T 
+    \end{equation*}
+    by orthonormality of $U$. Then we compute:
+    \begin{equation*}
+        \text{Var}(X) = \text{Tr}(XX^T) = \text{Tr}(\Sigma_k \Sigma_k^T) = \sum_{i=1}^k\sigma_i^2.
+    \end{equation*}
+    \noindent \textbf{Question 3.1.5:}  
+    \textit{Show that the variance of the residual data \( \mathcal{Z} \) is given by}  
+    \[
+    \text{Var}(\mathcal{Z}) = \sum_{i=k+1}^d \sigma_i^2.
+    \]
+    We have that $Z = Y - WW^TY$, so, recalling that $W=U_k$, we have:
+    \begin{equation*}
+        Z =U \Sigma V^T - U_kU_k^TU\Sigma V^T
+    \end{equation*}
+    we know that $U_kU_k^T$ is the orthogonal projection onto the column space of $U_k$. Then we can write:
+    \begin{equation*}
+        Z = (I_d - U_kU_k^T)U \Sigma V_T.
+    \end{equation*}
+    We now write $U = \begin{bmatrix}
+        U_k & U_{d-k}
+    \end{bmatrix}$. It follows that  $I_d - U_kU_k^T = UU^T - U_kU_k^T  = U_{d-k}U_{d-k}^T$, which is the orthogonal projection onto the column space of $U_{d-k}$. We then have:
+    \begin{equation*}
+        Z = U_{d-k}U_{d-k}^TU \Sigma V^T = U_{d-k}\begin{bmatrix}
+            0 & I_{d-k}
+        \end{bmatrix} \Sigma V^T
+    \end{equation*}
+    which simplifies to:
+    \begin{equation*}
+        Z = U_{d-k} \Sigma_{d-k} V^T.
+    \end{equation*}
+    Then, we can make the same argument as in Question 3.1.3 to show the claim. 
+    Then it can be seen that:
+    \begin{equation*}
+        \text{Var}(\mathcal{Y}) = \sum_{i=1}^d \sigma_i^2=  \sum_{i=1}^k \sigma_i^2 + \sum_{d-k=1}^d \sigma_i^2 =\text{Var}(\mathcal{X}) +\text{Var}(\mathcal{Z})
+    \end{equation*}
+    \newpage
+
+    \section{Classifying Non-Linearly-Separable Data with a Linear Classifier}
+
+    \noindent \textbf{Question 3.2.6:}  
+    \textit{Explain in detail how to achieve step 1 above, i.e., how to map the data into a two-dimensional space so that they become linearly separable. Write down all the steps of your proposed method. Start with a two-dimensional representation of the data in the original (non-linearly-separable) space, and explain how to obtain a mapping into the two-dimensional (linearly-separable) space.}
+    
+    \textbf{Answer:}
+    We see, that the data is of a circular shape and that it is perfectly separable by a circle. We will denote the data points as $x_i$. First we compute the data's centeroid with:
+    \begin{equation*}
+        \mathbf{m} = \frac{1}{N} \sum_{i=1}^N \mathbf{x}_i.
+    \end{equation*}
+
+    Then we map the data points to polar coordinates with respect to the centeroid:
+
+    \begin{align*}
+        r_i &= \|\mathbf{x}_i - \mathbf{m}\|, \\
+        \theta_i &= \arctan\left(\frac{x_{i,2} - m_2}{x_{i,1} - m_1}\right).
+    \end{align*}
+
+    Now all data points can be seperated by a line in the polar coordinate system over $2\pi$ with a trained radius. Our trained model will result in a line in the polar coordinate system. We could transform the line back to the cartesian coordinate system to get the seperating circle.
+
+    \vspace{0.5cm}
+    \noindent \textbf{Question 3.2.7:}  
+    \textit{Assume now that we have obtained a projection to the linearly-separable space and we have trained the linear classifier using the available data. A new (previously-unseen) data point is given (represented in the original two-dimensional space) and we want to apply the linear classifier on that point to obtain a prediction for its label. Explain in detail your method to classify such a previously-unseen data point.}
+    
+    \textbf{Answer:}
+    In this case, we have a new data point \( x_{\text{new}} \). Since our model is already trained and we do not want to train it again, we do not need to compute a new centroid. We directly map the new data point to polar coordinates with respect to the same centroid as before and get the polar coordinates \( (r_{\text{new}}, \theta_{\text{new}}) \). We then apply the trained model to the polar coordinates to get the prediction.
+
+    The steps are as follows:
+    1. Compute the vector from the centroid to the new data point:
+        \[
+        \mathbf{r}_{\text{new}} = \mathbf{x}_{\text{new}} - \mathbf{m}
+        \]
+    2. Convert this vector to polar coordinates:
+        \[
+        \theta_{\text{new}} = \arctan\left(\frac{r_{\text{new},2}}{r_{\text{new},1}}\right)
+        \]
+    3. Use the trained model to classify the new data point based on \( \theta_{\text{new}} \) and \( r_{\text{new}} \).
+
+    This method ensures that the new data point is classified correctly using the existing trained model without the need for retraining.
+
+    \newpage
+
+    \section{Spectral Graph Analysis}
+
+    \noindent \textbf{Question 3.3.8:}  
+    \textit{Let \( G = (V, E) \) be an undirected \( d \)-regular graph, let \( A \) be the adjacency matrix of \( G \), and let \( L = I - \frac{1}{d}A \) be the normalized Laplacian of \( G \). Prove that for any vector \( \mathbf{x} \in \mathbb{R}^{|V|} \) it is}  
+    \[
+    \mathbf{x}^T L \mathbf{x} = \frac{1}{d} \sum_{(u,v) \in E} (x_u - x_v)^2. \tag{2}
+    \]
+
+    \textbf{Answer:}
+
+    We know, that every vertex has the degree \( d \) and that the graph is undirected.
+
+    The normalized Laplacian \( L \) is given by
+    \[
+    L = I - \frac{1}{d} A.
+    \]
+    
+    We have:
+    \[
+    \mathbf{x}^T L \mathbf{x} = \mathbf{x}^T\left(I - \frac{1}{d}A\right)\mathbf{x} = \mathbf{x}^T \mathbf{x} - \frac{1}{d}\mathbf{x}^T A \mathbf{x}.
+    \]
+
+    With \(\mathbf{x}^T \mathbf{x} = \sum_{u \in V} x_u^2.\) 
+
+    \( A \) is symmetric and represents an undirected graph. Every edge contributes \( A_{uv}=1 \) and is counted twice. Thus:
+    \[
+    \mathbf{x}^T A \mathbf{x} = 2 \sum_{\{u,v\}\in E} x_u x_v.
+    \]
+
+    We get:
+    \[
+    \mathbf{x}^T L \mathbf{x} = \sum_{u\in V} x_u^2 - \frac{2}{d}\sum_{\{u,v\}\in E} x_u x_v.
+    \]
+
+    We expand the rhs. of the priginal equation:
+    \[
+    (x_u - x_v)^2 = x_u^2 - 2x_u x_v + x_v^2.
+    \]
+
+    Sum this over all edges \(\{u,v\}\in E\):
+    \begin{align*}   
+    \sum_{\{u,v\}\in E}(x_u - x_v)^2 &= \sum_{\{u,v\}\in E}(x_u^2 + x_v^2 - 2x_u x_v)\\
+    &= \sum_{\{u,v\}\in E}(x_u^2 + x_v^2) - 2\sum_{\{u,v\}\in E}x_u x_v.
+    \end{align*}
+
+    Every edge contributes twice to each vertex. When counting the sum of squares of all vertices, we get:
+    \[
+    \sum_{\{u,v\}\in E}(x_u^2 + x_v^2) = d \sum_{u \in V} x_u^2.
+    \]
+
+    and therefore:
+    \begin{align*}
+        \sum_{\{u,v\}\in E}(x_u - x_v)^2 = d\sum_{u \in V}x_u^2 - 2\sum_{\{u,v\}\in E}x_u x_v,\\
+        \frac{1}{d}\sum_{\{u,v\}\in E}(x_u - x_v)^2 = \sum_{u \in V} x_u^2 - \frac{2}{d}\sum_{\{u,v\}\in E}x_u x_v.
+    \end{align*}
+    
+    which is equal to what we have derived for \( \mathbf{x}^T L \mathbf{x} \).
+    It follows, that:
+
+    \[
+    \mathbf{x}^T L \mathbf{x} = \frac{1}{d}\sum_{\{u,v\}\in E}(x_u - x_v)^2.
+    \]
+    \vspace{0.5cm}
+
+    \noindent \textbf{Question 3.3.9:}  
+    \textit{Show that the normalized Laplacian is a positive semidefinite matrix.}
+
+    \textbf{Answer:}
+
+    A matrix is positive semidefinite, if for every vector \( \mathbf{x} \) we have \( \mathbf{x}^T L \mathbf{x} \geq 0 \). 
+    We have shown, that \( \mathbf{x}^T L \mathbf{x} = \frac{1}{d}\sum_{\{u,v\}\in E}(x_u - x_v)^2 \). Since the sum of squares is always greater than or equal to zero, the normalized Laplacian is positive semidefinite.
+    \vspace{0.5cm}
+
+    \noindent \textbf{Question 3.3.10:}  
+    \textit{Assume that we find a non-trivial vector \( \mathbf{x}_* \) that minimizes the expression \( \mathbf{x}^T L \mathbf{x} \). First explain what non-trivial means. Second explain how \( \mathbf{x}_* \) can be used as an embedding of the vertices of the graph into the real line. Use Equation (2) to justify the claim that \( \mathbf{x}_* \) provides a meaningful embedding.}
+
+    \textbf{Answer:}
+    Since the normalized Laplacian is positive semidefinite, the minimum of \( \mathbf{x}^T L \mathbf{x} \) is zero. Thus is always achieved by a vector \( \mathbf{x}_{trivial}\) that is constant over all vertices, since the sum of squares of the differences is zero. A non-trivial vector is a vector that is not constant over all vertices.\par
+    The vector \( \mathbf{x}_* \) can be used as an embedding of the graph into the real line by interpreting each component as the position of vertex on the real line. This embedding is meaningful, as the sum of square differences is minimized and therefore vertices, that are connected by an edge are mapped to similar values on the line, reflecting their strong connectivity. Vertices in different parts of the graph are mapped to more distinct values, reflecting the graph's overall structure.\par
+    In conclusion, the vector \( \mathbf{x}_* \) provides information about the graphs structure and connectivity and is therefore a meaningful embedding.
+
+
+
+
+\end{multicols}
+
+\clearpage
+% \addcontentsline{toc}{section}{References}
+% \printbibliography{}
+
+\end{document}
+
