@@ -54,14 +54,12 @@
     \begin{equation*}
         X = U \Sigma V^T
     \end{equation*}
-
     the SVD for $X^T$ is then simply:
 
     \begin{equation*}
         X^T = (U \Sigma V^T)^T = V \Sigma^T U^T
     \end{equation*}
-
-     Therefore, the principal components of $X$ and $X^T$ can be computed with one SVD operation.
+    Therefore, the principal components of $X$ and $X^T$ can be computed with one SVD operation.
     \vspace{0.5cm}
 
     \noindent \textbf{Question 3.1.3:}  
@@ -87,7 +85,7 @@
     \end{equation*}
     So we have that the variance is:
     \begin{equation*}
-        \text{Var}(Y) =\text{Tr}((U \Sigma V^T)^TU \Sigma V^T) = \text{Tr}(V \Sigma U^T U \Sigma V^T)
+        \text{Var}(Y) =\text{Tr}((U \Sigma V^T)^TU \Sigma V^T) = \text{Tr}(V \Sigma^T U^T U \Sigma V^T)
     \end{equation*}
     by orthonormality of $U$ and $V$ , we have $U^TU=I$, $V^TV=I$. Furthermore, we know that the trace is invariant under cyclic 
     operations. So the equation above simplifies to:
@@ -115,7 +113,9 @@
 
     
     Since $W$ is the first $k$ columns of $U$, we have that $X=U^T_kU\Sigma V^T$. We notice now 
-    that we are selecting the first $k$ singular values of $\Sigma$, so we have:
+    that we are selecting the first $k$ singular values of $\Sigma$ (because $U^T_kU = \begin{bmatrix}
+        I_k & 0
+    \end{bmatrix} $), so we have:
     \begin{equation*}
         X = U^T_kU\Sigma_kV^T = \Sigma_kV^T 
     \end{equation*}
