@@ -19,15 +19,15 @@
 
 
 % Title page
-\title{HW A2\\\Large{Machine Learning, Advanced Course/DD2434/mladv24}}
-\author{Author \\ KTH Royal Institute of Technology\\ School of Engineering Sciences in Chemistry, Biotechnology and Health}
+\title{B1\\\Large{Machine Learning, Advanced Course/DD2434/mladv24}}
+\author{Leonardo Lüder \\ KTH Royal Institute of Technology\\ School of Engineering Sciences in Chemistry, Biotechnology and Health}
 \date{\today}
 
 % Header and footer
 \pagestyle{fancy}
 \fancyhead{}
 \fancyhead[L]{\textbf{Machine Learning, Advanced Course}\\\textbf{DD2434}}
-\fancyhead[R]{\textbf{Andrea Stanziale, Leonardo Lüder}\\ stanz@kth.se, luder@kth.se}
+\fancyhead[R]{\textbf{Leonardo Lüder}\\ luder@kth.se}
 \fancyfoot{}
 \begin{document}
 
@@ -38,248 +38,308 @@
 \pagenumbering{arabic}
 \begin{multicols}{2}
 
-    \section{Principal Component Analysis}
+    \section*{Question 1.1.1:}
+    Draw the DAG/PGM/Bayesian Network of the model described above.
 
-    \noindent \textbf{Question 3.1.1:}  
-    \textit{Explain why this data-centering step is required while performing PCA. What could be an undesirable effect if we perform PCA on non-centered data?}  
-    Data centering is required to ensure that the first principal component is the direction of maximum variance. If the data is not centered, 
-    the first principal component will be the direction that best fits the data, which is not necessarily the direction of maximum variance, but it may be 
-    skewed by the mean.
-    This is because the data is not centered around the origin, and the origin is not the center of mass of the data. 
-
-    \noindent \textbf{Question 3.1.2:}  
-    \textit{Does the previous argument imply that a \textbf{single} SVD operation is sufficient to perform PCA both on the rows and the columns of a data matrix? Justify your answer.}  
-    Yes. The SVD for $X$ is:
-
-    \begin{equation*}
-        X = U \Sigma V^T
-    \end{equation*}
-
-    the SVD for $X^T$ is then simply:
-
-    \begin{equation*}
-        X^T = (U \Sigma V^T)^T = V \Sigma^T U^T
-    \end{equation*}
-
-     Therefore, the principal components of $X$ and $X^T$ can be computed with one SVD operation.
-    \vspace{0.5cm}
-
-    \noindent \textbf{Question 3.1.3:}  
-    \textit{Show that the variance of the dataset \( \mathcal{Y} \), as defined in Equation (1), can be expressed as a function of the singular values of \( \mathbf{Y} \), and in particular}  
-    \[
-    \text{Var}(\mathcal{Y}) = \sum_{i=1}^d \sigma_i^2.
-    \]
-    We have that the mean of the data is zero, so the variance is given by:
-
-    \begin{equation*}
-        \text{Var}(\mathcal{Y})= \sum_{i=1}^{n}||x_i||_2^2
-    \end{equation*}
-    if we represent the dataset in a matrix $Y = \begin{bmatrix}
-        y_1 & \cdots & y_n
-    \end{bmatrix}$ the variance can then be expressed as the trace of $Y^TY$:
-    \begin{equation*}
-        \text{Var}(Y) =\text{Tr}(Y^TY).
-    \end{equation*}
-    Consider now the SVD of $Y$:
-
-    \begin{equation*}
-        Y = U \Sigma V^T.
-    \end{equation*}
-    So we have that the variance is:
-    \begin{equation*}
-        \text{Var}(Y) =\text{Tr}((U \Sigma V^T)^TU \Sigma V^T) = \text{Tr}(V \Sigma U^T U \Sigma V^T)
-    \end{equation*}
-    by orthonormality of $U$ and $V$ , we have $U^TU=I$, $V^TV=I$. Furthermore, we know that the trace is invariant under cyclic 
-    operations. So the equation above simplifies to:
-    \begin{equation*}
-        \text{Var}(Y) = \text{Tr}(\Sigma^T \Sigma) = \sum_{i=1}^{d} \sigma_i^2
-    \end{equation*} 
-    \vspace{0.5cm}
-
-    \noindent \textbf{Question 3.1.4:}  
-    \textit{Show that the variance of the projected data \( \mathcal{X} \) is given by}  
-    \[
-    \text{Var}(\mathcal{X}) = \sum_{i=1}^k \sigma_i^2.
-    \]
-
-    \vspace{0.5cm}
-    Now we have that the variance of the projected data is given by:
-    \begin{equation*}
-        \text{Var}(\mathcal{X}) = \sum_{i=1}^{n}||x_i||_2^2
-    \end{equation*}    
-    we again represent the dataset in a matrix:
-    \(X = \begin{bmatrix}
-         x_1 & \cdots & x_n 
-        \end{bmatrix}\), and we follow the same argument that we made before to write  $\text{Var}(X)=\text{Tr}(XX^T)$.
-    Writing $Y = U \Sigma V^T$, the projected data is given by $X = W^T U \Sigma V^T$.
-
-    
-    Since $W$ is the first $k$ columns of $U$, we have that $X=U^T_kU\Sigma V^T$. We notice now 
-    that we are selecting the first $k$ singular values of $\Sigma$, so we have:
-    \begin{equation*}
-        X = U^T_kU\Sigma_kV^T = \Sigma_kV^T 
-    \end{equation*}
-    by orthonormality of $U$. Then we compute:
-    \begin{equation*}
-        \text{Var}(X) = \text{Tr}(XX^T) = \text{Tr}(\Sigma_k \Sigma_k^T) = \sum_{i=1}^k\sigma_i^2.
-    \end{equation*}
-    \noindent \textbf{Question 3.1.5:}  
-    \textit{Show that the variance of the residual data \( \mathcal{Z} \) is given by}  
-    \[
-    \text{Var}(\mathcal{Z}) = \sum_{i=k+1}^d \sigma_i^2.
-    \]
-    We have that $Z = Y - WW^TY$, so, recalling that $W=U_k$, we have:
-    \begin{equation*}
-        Z =U \Sigma V^T - U_kU_k^TU\Sigma V^T
-    \end{equation*}
-    we know that $U_kU_k^T$ is the orthogonal projection onto the column space of $U_k$. Then we can write:
-    \begin{equation*}
-        Z = (I_d - U_kU_k^T)U \Sigma V_T.
-    \end{equation*}
-    We now write $U = \begin{bmatrix}
-        U_k & U_{d-k}
-    \end{bmatrix}$. It follows that  $I_d - U_kU_k^T = UU^T - U_kU_k^T  = U_{d-k}U_{d-k}^T$, which is the orthogonal projection onto the column space of $U_{d-k}$. We then have:
-    \begin{equation*}
-        Z = U_{d-k}U_{d-k}^TU \Sigma V^T = U_{d-k}\begin{bmatrix}
-            0 & I_{d-k}
-        \end{bmatrix} \Sigma V^T
-    \end{equation*}
-    which simplifies to:
-    \begin{equation*}
-        Z = U_{d-k} \Sigma_{d-k} V^T.
-    \end{equation*}
-    Then, we can make the same argument as in Question 3.1.3 to show the claim. 
-    Then it can be seen that:
-    \begin{equation*}
-        \text{Var}(\mathcal{Y}) = \sum_{i=1}^d \sigma_i^2=  \sum_{i=1}^k \sigma_i^2 + \sum_{d-k=1}^d \sigma_i^2 =\text{Var}(\mathcal{X}) +\text{Var}(\mathcal{Z})
-    \end{equation*}
-    \newpage
-
-    \section{Classifying Non-Linearly-Separable Data with a Linear Classifier}
-
-    \noindent \textbf{Question 3.2.6:}  
-    \textit{Explain in detail how to achieve step 1 above, i.e., how to map the data into a two-dimensional space so that they become linearly separable. Write down all the steps of your proposed method. Start with a two-dimensional representation of the data in the original (non-linearly-separable) space, and explain how to obtain a mapping into the two-dimensional (linearly-separable) space.}
-    
     \textbf{Answer:}
-    We see, that the data is of a circular shape and that it is perfectly separable by a circle. We will denote the data points as $x_i$. First we compute the data's centeroid with:
-    \begin{equation*}
-        \mathbf{m} = \frac{1}{N} \sum_{i=1}^N \mathbf{x}_i.
-    \end{equation*}
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.4\textwidth]{figures/1/DAG.jpg}
+        \caption{DAG of the model.}
+    \end{figure}
 
-    Then we map the data points to polar coordinates with respect to the centeroid:
+    \section*{Question 1.1.2:}
 
+    Express \( \log p(X, Z^1, Z^2, \pi^1, \pi^2, \rho | \alpha^1, \alpha^2, \beta) \) in terms of indicator functions and sums of the log of known pdfs/pmfs.  
+    Do not insert the expressions for the Dirichlet distributions, e.g., write "… + \(\log p(\pi^1)\)".
+
+    \textbf{Answer:}
+    We have the joint distribution given as:
+    
+    \begin{multline}
+    p\bigl(X, Z^1, Z^2, \pi^1, \pi^2, \rho \,\big|\,
+        \alpha^1, \alpha^2, \beta\bigr) \;\\=\;
+    p\bigl(\pi^1 \,\big|\,\alpha^1\bigr)\;
+    p\bigl(\pi^2 \,\big|\,\alpha^2\bigr)\;
+    \prod_{k} p\bigl(\rho_k \,\big|\,\beta_k\bigr) \\
+    \times\; \prod_{n} \Bigl[
+    p\bigl(Z^1_n \,\big|\,\pi^1\bigr)\;
+    p\bigl(Z^2_n \,\big|\,\pi^2\bigr)\;
+    \prod_{j} p\bigl(X_{nj} \,\big|\,\rho_{k=n}\bigr)
+    \Bigr].
+    \end{multline}
+    
+
+    We want \(\log p(X,Z^1,Z^2,\pi^1,\pi^2,\rho \mid \alpha^1,\alpha^2,\beta)\).
+
+    By the model factorization:
+
+    \[
+    \begin{aligned}
+    \log &p(X,Z^1,Z^2,\pi^1,\pi^2,\rho \mid \alpha^1,\alpha^2,\beta)
+    \\&=
+    \underbrace{\log p(\pi^1)}_{\text{Dirichlet}(\alpha^1)}
+    \;+\;
+    \underbrace{\log p(\pi^2)}_{\text{Dirichlet}(\alpha^2)}
+    \;+\;
+    \sum_{k=1}^K \underbrace{\log p(\rho_k)}_{\text{Dirichlet}(\beta_k)}
+    \\
+    &\quad
+    +\;\sum_{n=1}^N 
+    \Bigl[
+    \underbrace{\log p(Z_n^1 \mid \pi^1)}_{\text{Categorical}(\pi^1)}
+    \;+\;
+    \underbrace{\log p(Z_n^2 \mid \pi^2)}_{\text{Categorical}(\pi^2)}
+    \;+\\\;
+    &\sum_{j=1}^J \underbrace{\log p\bigl(X_{nj} \mid Z_n^1+Z_n^2,\rho\bigr)}_{\text{Categorical}(\rho_{Z_n^1+Z_n^2})}
+    \Bigr].
+    \end{aligned}
+    \]
+
+    In indicator-function form, we write each Categorical likelihood as
+    \[
+    \log p(Z_n^1 = d \mid \pi^1)
+    \;=\;\sum_{d=1}^{D^1}\mathbf{1}[Z_n^1 = d]\;\log \pi^1_d,
+    \]  
+    and similarly for \(Z_n^2\).  
+    Likewise, for each observation \(X_{nj}\),  
+    \[
+    \log p(X_{nj}=r \mid Z_n^1+Z_n^2 = k,\, \rho_k)
+    \;=\; \sum_{r=1}^{D^3} \mathbf{1}[X_{nj}=r]\;\log \rho_{k,r}.
+    \]
+
+    We combine to get:
+
+    \[
+    \begin{aligned}
+    \log p(X,Z^1,Z^2,\pi^1,\pi^2,\rho \mid \alpha^1,\alpha^2,\beta)
+    &\\=
+    \log p(\pi^1)
+    \;+\;
+    \log p(\pi^2)
+    \;+\;
+    \sum_{k=1}^K \log p(\rho_k)
+    \\
+    +\;
+    \sum_{n=1}^N 
+    \Bigl[
+    \sum_{d=1}^{D^1} \mathbf{1}[Z_n^1 = d]\;\log \pi^1_d
+    \;+\;
+    \sum_{e=1}^{D^2} \mathbf{1}[Z_n^2 = e]\;\log \pi^2_e
+    \\
+    &\quad\qquad\qquad\;\;
+    +\;\sum_{j=1}^J
+        \sum_{r=1}^{D^3} 
+        \mathbf{1}[X_{nj}=r]\;\log \rho_{(Z_n^1 + Z_n^2),\,r}
+    \Bigr].
+    \end{aligned}
+    \]
+
+    \section*{Question 1.1.3:}
+   
+    Use the mean-field assumption:  
+    \[
+    q(Z^1, Z^2, \pi^1, \pi^2, \rho) = q(\pi^1)q(\pi^2)\prod_n q(Z^1_n)q(Z^2_n)\prod_k q(\rho_k)
+    \]  
+    and the CAVI update equation to derive the optimal variational distributions and parameters of \(q(Z^1_n)\), \(q(\pi^1)\), and \(q(\rho_k)\). 
+
+    The mean-field assumption is given by:
     \begin{align*}
-        r_i &= \|\mathbf{x}_i - \mathbf{m}\|, \\
-        \theta_i &= \arctan\left(\frac{x_{i,2} - m_2}{x_{i,1} - m_1}\right).
+    q(Z^1, Z^2, \pi^1, \pi^2, &\rho)
+    \;=\\\;
+    q(\pi^1)\;q(&\pi^2)\;\prod_{n=1}^N q(Z_n^1)\;q(Z_n^2)\;\prod_{k=1}^K q(\rho_k).
     \end{align*}
 
-    Now all data points can be seperated by a line in the polar coordinate system over $2\pi$ with a trained radius. Our trained model will result in a line in the polar coordinate system. We could transform the line back to the cartesian coordinate system to get the seperating circle.
+    \subsection*{Update for \(q(\pi^1)\)}
 
-    \vspace{0.5cm}
-    \noindent \textbf{Question 3.2.7:}  
-    \textit{Assume now that we have obtained a projection to the linearly-separable space and we have trained the linear classifier using the available data. A new (previously-unseen) data point is given (represented in the original two-dimensional space) and we want to apply the linear classifier on that point to obtain a prediction for its label. Explain in detail your method to classify such a previously-unseen data point.}
-    
-    \textbf{Answer:}
-    In this case, we have a new data point \( x_{\text{new}} \). Since our model is already trained and we do not want to train it again, we do not need to compute a new centroid. We directly map the new data point to polar coordinates with respect to the same centroid as before and get the polar coordinates \( (r_{\text{new}}, \theta_{\text{new}}) \). We then apply the trained model to the polar coordinates to get the prediction.
+    The CAVI update is given by:
 
-    The steps are as follows:
-    1. Compute the vector from the centroid to the new data point:
-        \[
-        \mathbf{r}_{\text{new}} = \mathbf{x}_{\text{new}} - \mathbf{m}
-        \]
-    2. Convert this vector to polar coordinates:
-        \[
-        \theta_{\text{new}} = \arctan\left(\frac{r_{\text{new},2}}{r_{\text{new},1}}\right)
-        \]
-    3. Use the trained model to classify the new data point based on \( \theta_{\text{new}} \) and \( r_{\text{new}} \).
-
-    This method ensures that the new data point is classified correctly using the existing trained model without the need for retraining.
-
-    \newpage
-
-    \section{Spectral Graph Analysis}
-
-    \noindent \textbf{Question 3.3.8:}  
-    \textit{Let \( G = (V, E) \) be an undirected \( d \)-regular graph, let \( A \) be the adjacency matrix of \( G \), and let \( L = I - \frac{1}{d}A \) be the normalized Laplacian of \( G \). Prove that for any vector \( \mathbf{x} \in \mathbb{R}^{|V|} \) it is}  
     \[
-    \mathbf{x}^T L \mathbf{x} = \frac{1}{d} \sum_{(u,v) \in E} (x_u - x_v)^2. \tag{2}
+    \log q(\pi^1)
+    \;\;\propto\;\;
+    \mathbb{E}_{q(\text{all other vars})}\bigl[\,
+    \log p(X,Z^1,Z^2,\pi^1,\pi^2,\rho)
+    \bigr].
     \]
 
-    \textbf{Answer:}
+    The terms involving \(\pi^1\) are:
+    \begin{itemize}
+        \item \(\log p(\pi^1)\) (the Dirichlet prior),
+        \item \(\sum_{n=1}^N \sum_{d=1}^{D^1} \mathbf{1}[Z_n^1=d]\,\log \pi^1_d\).
+    \end{itemize}
 
-    We know, that every vertex has the degree \( d \) and that the graph is undirected.
+    Taking the expectation w.r.t. to all other variables replaces \(\mathbf{1}[Z_n^1=d]\) with \(q(Z_n^1=d)\).  We get:
 
-    The normalized Laplacian \( L \) is given by
     \[
-    L = I - \frac{1}{d} A.
-    \]
-    
-    We have:
-    \[
-    \mathbf{x}^T L \mathbf{x} = \mathbf{x}^T\left(I - \frac{1}{d}A\right)\mathbf{x} = \mathbf{x}^T \mathbf{x} - \frac{1}{d}\mathbf{x}^T A \mathbf{x}.
+    \log q(\pi^1)
+    \;\propto\;
+    \log p(\pi^1)
+    \;+\;
+    \sum_{n=1}^N
+    \sum_{d=1}^{D^1} 
+    q(Z_n^1 = d)\;\log \pi^1_d.
     \]
 
-    With \(\mathbf{x}^T \mathbf{x} = \sum_{u \in V} x_u^2.\) 
+    \(\log p(\pi^1)\) is a Dirichlet(\(\alpha^1\)), therefore we get:
 
-    \( A \) is symmetric and represents an undirected graph. Every edge contributes \( A_{uv}=1 \) and is counted twice. Thus:
     \[
-    \mathbf{x}^T A \mathbf{x} = 2 \sum_{\{u,v\}\in E} x_u x_v.
+    q(\pi^1)
+    \;=\;
+    \mathrm{Dirichlet}
+    \Bigl(
+    \alpha^1_d \;+\;\sum_{n=1}^N q(Z_n^1 = d)
+    \Bigr)_{d=1}^{D^1}.
     \]
+
+    Equivalently:  
+    \[
+    q(\pi^1) 
+    \;=\; 
+    \mathrm{Dirichlet}\Bigl(\alpha^1 + m^1\Bigr),
+    \quad\text{where } m^1_d = \sum_{n=1}^N q(Z_n^1 = d).
+    \]
+
+    \subsection*{Update for \(q(Z_n^1)\)}
+
+    Again,  
+    \[
+    \log q(Z_n^1 = d)
+    \;\;\propto\;\;
+    \mathbb{E}_{q(\text{all other vars})}\bigl[\,
+    \log p(X,Z^1,Z^2,\pi^1,\pi^2,\rho)
+    \bigr].
+    \]
+
+    The terms involving \(Z_n^1\) are:
+    \begin{itemize}
+        \item \(\sum_{d=1}^{D^1} \mathbf{1}[Z_n^1=d]\;\log \pi^1_d\),
+        \begin{itemize}
+            \item When \(Z_n^1 = d\), contributes \(\log \pi^1_d\).
+        \end{itemize}
+        \item \(\sum_{j=1}^J \sum_{r=1}^{D^3} \mathbf{1}[X_{nj}=r]\;\log \rho_{(Z_n^1+Z_n^2),r}\),
+        \begin{itemize}
+            \item When \(Z_n^1=d\) and \(Z_n^2=e\), the index is \((d+ e)\).
+            \item We must take expectation over \(Z_n^2\) as well, i.e.\ replace \(\mathbf{1}[Z_n^2 = e]\) by \(q(Z_n^2 = e)\).
+        \end{itemize}
+    \end{itemize}
 
     We get:
-    \[
-    \mathbf{x}^T L \mathbf{x} = \sum_{u\in V} x_u^2 - \frac{2}{d}\sum_{\{u,v\}\in E} x_u x_v.
-    \]
 
-    We expand the rhs. of the priginal equation:
-    \[
-    (x_u - x_v)^2 = x_u^2 - 2x_u x_v + x_v^2.
-    \]
-
-    Sum this over all edges \(\{u,v\}\in E\):
-    \begin{align*}   
-    \sum_{\{u,v\}\in E}(x_u - x_v)^2 &= \sum_{\{u,v\}\in E}(x_u^2 + x_v^2 - 2x_u x_v)\\
-    &= \sum_{\{u,v\}\in E}(x_u^2 + x_v^2) - 2\sum_{\{u,v\}\in E}x_u x_v.
-    \end{align*}
-
-    Every edge contributes twice to each vertex. When counting the sum of squares of all vertices, we get:
-    \[
-    \sum_{\{u,v\}\in E}(x_u^2 + x_v^2) = d \sum_{u \in V} x_u^2.
-    \]
-
-    and therefore:
+    
     \begin{align*}
-        \sum_{\{u,v\}\in E}(x_u - x_v)^2 = d\sum_{u \in V}x_u^2 - 2\sum_{\{u,v\}\in E}x_u x_v,\\
-        \frac{1}{d}\sum_{\{u,v\}\in E}(x_u - x_v)^2 = \sum_{u \in V} x_u^2 - \frac{2}{d}\sum_{\{u,v\}\in E}x_u x_v.
+    \log q(Z_n^1 = d)
+    \propto
+    \mathbb{E}_{q(\pi^1)}&\bigl[\log \pi^1_d\bigr]
+    \;+\\\;
+    \mathbb{E}_{q(Z_n^2),\,q(\rho)}\Bigl[
+    \sum_{j=1}^J &\sum_{r=1}^{D^3} \mathbf{1}[X_{nj}=r]\;\log \rho_{(d + Z_n^2),r}
+    \Bigr].
     \end{align*}
     
-    which is equal to what we have derived for \( \mathbf{x}^T L \mathbf{x} \).
-    It follows, that:
+    \(\mathbb{E}_{q(\pi^1)}[\log \pi^1_d]\) could also be written using the digamma function, but we keep it as is. For the second term we get:
 
     \[
-    \mathbf{x}^T L \mathbf{x} = \frac{1}{d}\sum_{\{u,v\}\in E}(x_u - x_v)^2.
+        \sum_{e=1}^{D^2} q(Z_n^2 = e)
+        \sum_{j=1}^J
+        \sum_{r=1}^{D^3} \mathbf{1}[X_{nj}=r]\,\mathbb{E}_{q(\rho_{d+e})}[\log \rho_{(d+e),r}].
     \]
-    \vspace{0.5cm}
 
-    \noindent \textbf{Question 3.3.9:}  
-    \textit{Show that the normalized Laplacian is a positive semidefinite matrix.}
+    Exponentiating and normalizing over \(d\in\{1,\dots,D^1\}\) gives us
 
-    \textbf{Answer:}
+    \begin{align*}
+        q(Z_n^1 = d)
+        \;\propto\;
+        \exp&\Bigl(
+        \underbrace{\mathbb{E}_{q(\pi^1)}[\log \pi^1_d]}_{\text{Dirichlet posterior}}
+        \;+\\\;
+        \sum_{e=1}^{D^2} q(Z_n^2 = e)
+            \sum_{j=1}^J &\sum_{r=1}^{D^3}
+            \mathbf{1}[X_{nj}=r]\;\mathbb{E}_{q(\rho_{d+e})}[\log \rho_{(d+e),\,r}]
+        \Bigr).
+    \end{align*}
 
-    A matrix is positive semidefinite, if for every vector \( \mathbf{x} \) we have \( \mathbf{x}^T L \mathbf{x} \geq 0 \). 
-    We have shown, that \( \mathbf{x}^T L \mathbf{x} = \frac{1}{d}\sum_{\{u,v\}\in E}(x_u - x_v)^2 \). Since the sum of squares is always greater than or equal to zero, the normalized Laplacian is positive semidefinite.
-    \vspace{0.5cm}
+    \subsection*{Update for \(q(\rho_k)\)}
 
-    \noindent \textbf{Question 3.3.10:}  
-    \textit{Assume that we find a non-trivial vector \( \mathbf{x}_* \) that minimizes the expression \( \mathbf{x}^T L \mathbf{x} \). First explain what non-trivial means. Second explain how \( \mathbf{x}_* \) can be used as an embedding of the vertices of the graph into the real line. Use Equation (2) to justify the claim that \( \mathbf{x}_* \) provides a meaningful embedding.}
+    The terms involving \(\rho_k\) are:
 
-    \textbf{Answer:}
-    Since the normalized Laplacian is positive semidefinite, the minimum of \( \mathbf{x}^T L \mathbf{x} \) is zero. Thus is always achieved by a vector \( \mathbf{x}_{trivial}\) that is constant over all vertices, since the sum of squares of the differences is zero. A non-trivial vector is a vector that is not constant over all vertices.\par
-    The vector \( \mathbf{x}_* \) can be used as an embedding of the graph into the real line by interpreting each component as the position of vertex on the real line. This embedding is meaningful, as the sum of square differences is minimized and therefore vertices, that are connected by an edge are mapped to similar values on the line, reflecting their strong connectivity. Vertices in different parts of the graph are mapped to more distinct values, reflecting the graph's overall structure.\par
-    In conclusion, the vector \( \mathbf{x}_* \) provides information about the graphs structure and connectivity and is therefore a meaningful embedding.
+    \begin{itemize}
+        \item \(\log p(\rho_k)\) (its Dirichlet prior),
+        \item \(\sum_{n=1}^N \sum_{j=1}^J \sum_{r=1}^{D^3} \mathbf{1}[X_{nj}=r]\;\log \rho_{(Z_n^1+Z_n^2),r}\),
+        \begin{itemize}
+            \item But only those \(n\) for which \(Z_n^1 + Z_n^2 = k\).
+        \end{itemize}
+    \end{itemize}
+    Hence,
 
+    
+    \begin{align*}
+    \log q(\rho_k)
+    \propto
+    \log p(\rho_k)
+    \;+&\\\;
+    \sum_{n=1}^N
+    \sum_{j=1}^J
+    \sum_{r=1}^{D^3}
+        \mathbf{1}[X_{nj} = r]
+        \;\;&\mathbb{E}_{q(Z_n^1,\,Z_n^2)}\bigl[\mathbf{1}[Z_n^1 + Z_n^2 = k]\;\log \rho_{k,r}\bigr].
+    \end{align*}
+    
 
+    \(\mathbf{1}[Z_n^1 + Z_n^2 = k]\) becomes \(\sum_{d,e}\mathbf{1}[d+e=k]\,q(Z_n^1=d)q(Z_n^2=e)\).  So
 
+    
+    \begin{align*}
+    \log q(\rho_k)
+    \propto
+    \log p(\rho_k)
+    \;+&\;
+    \sum_{n=1}^N
+    \sum_{j=1}^J
+    \sum_{r=1}^{D^3}
+        \mathbf{1}[X_{nj} = r]
+        \\\Bigl[
+        \sum_{d=1}^{D^1}\sum_{e=1}^{D^2}
+            \mathbf{1}[d+e = k]&\,q(Z_n^1 = d)\,q(Z_n^2 = e)
+        \Bigr]
+        \log \rho_{k,r}.
+    \end{align*}
+    
+    Summarize for each category \(r\in\{1,\dots,D^3\}\) as:
+
+    \begin{align*}
+    m_{k,r}
+    \;=\;
+    \sum_{n=1}^N
+    \sum_{j=1}^J 
+    \mathbf{1}[X_{nj} = r]&\\
+    \sum_{d=1}^{D^1}\sum_{e=1}^{D^2}
+        \mathbf{1}[d+e = k]&\,q(Z_n^1 = d)\,q(Z_n^2 = e).
+    \end{align*}
+    And therefore,
+
+    \[
+    \log q(\rho_k)
+    \;\propto\;
+    \log p(\rho_k)
+    \;+\;
+    \sum_{r=1}^{D^3}
+    m_{k,r}\;\log \rho_{k,r}.
+    \]
+
+    \(\log p(\rho_k)\) is a \(\mathrm{Dirichlet}(\beta_k)\) prior, therefore the updated variational distribution is:
+
+    \[
+    q(\rho_k)
+    \;=\;
+    \mathrm{Dirichlet}\Bigl(
+    \beta_k^r
+    \;+\;
+    m_{k,r}
+    \Bigr)_{r=1}^{D^3}.
+    \]
+
+    We also note, that $q(\pi^2)$ and $q(Z_n^2)$ can be updated in a equivalently as $q(\pi^1)$ and $q(Z_n^1)$.
 
 \end{multicols}
 
