@@ -1,15 +1,25 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import colorcet as cc
+
+
 
 #read similarity matrix into pandas dataframe and then convert to numpy array
 
 similarity_matrix_ext = pd.read_csv("MEP_similarity_matrix.csv", header=None).to_numpy()
 
+#read MEP info into pandas dataframe and then convert to numpy array
+info_array = pd.read_csv("MEP_info.csv", index_col=0).to_numpy()
+
+epgs = info_array[:,1] 
+country_list = info_array[:,0]
+
 #make sure to exclude headers 
 similarity_matrix = similarity_matrix_ext[1:,1:]
 
 #----------------------------------------------------------------------
-# 4. Define the distance matrix as sqrt(1-similarity)
+# 8. Define the distance matrix as sqrt(1-similarity)
 #----------------------------------------------------------------------
 def similarity_to_distance(similarity_matrix):
     """
@@ -17,11 +27,16 @@ def similarity_to_distance(similarity_matrix):
     The distance is defined as sqrt(1 - similarity).
     """
     # Compute the distance matrix
-    distance_matrix = np.sqrt(1 - similarity_matrix)
+    safe_diff = 1 - np.clip(similarity_matrix, 0, 1)
+    distance_matrix = np.sqrt(safe_diff)
+
+    print("Min similarity:", np.nanmin(similarity_matrix))
+    print("Max similarity:", np.nanmax(similarity_matrix))
+
     return distance_matrix
 
 #----------------------------------------------------------------------
-# 5. Compute classical MDS
+# 9. Compute classical MDS
 #----------------------------------------------------------------------
 
 def classical_mds(dist_matrix, dim=2):
@@ -67,5 +82,61 @@ def classical_mds(dist_matrix, dim=2):
     X = V @ Lambda_half
     return X
 
+#----------------------------------------------------------------------
+# 10.Compute Distance MAtrix and apply MDS to the distance matrix
+#----------------------------------------------------------------------
+
+dist_matrix = similarity_to_distance(similarity_matrix)
+coords_2d = classical_mds(dist_matrix, dim=2)
 
 
+#----------------------------------------------------------------------
+# 11. Plot the 2D coordinates
+#----------------------------------------------------------------------
+if __name__ == "__main__":
+    plt.figure(figsize=(8,6))
+
+
+    unique_epgs = list(set(epgs))
+    colors = plt.cm.get_cmap('tab10', len(unique_epgs))  # or another colormap
+
+    for epg in unique_epgs:
+        idx = [i for i in range(len(epgs)) if epgs[i] == epg]
+        plt.scatter(coords_2d[idx, 0], coords_2d[idx, 1], 
+                    label=epg, alpha=0.7, c=[colors(unique_epgs.index(epg))])
+
+    plt.title("MDS Embedding Colored by EPG")
+    plt.xlabel("Dimension 1")
+    plt.ylabel("Dimension 2")
+    plt.legend(bbox_to_anchor=(1, 1), 
+            loc='upper left', 
+            borderaxespad=0.)
+    plt.savefig("MDS_EPG.png", bbox_inches="tight")
+    plt.show()
+
+    #----------------------------------------------------------------------
+    plt.figure(figsize=(8,6))
+
+    unique_countries = sorted(set(country_list))
+    num_countries = len(unique_countries)  # 28 in your case
+
+    cmap = cc.glasbey[:num_countries]
+
+    for i, country in enumerate(unique_countries):
+        idx = [j for j, c in enumerate(country_list) if c == country]
+        plt.scatter(coords_2d[idx, 0],
+                    coords_2d[idx, 1],
+                    label=country,
+                    color=[cmap[i]],
+                    s=60,
+                    edgecolor='k',
+                    linewidth=0.5)
+
+    plt.title("MDS Embedding Colored by Country")
+    plt.xlabel("Dimension 1")
+    plt.ylabel("Dimension 2")
+    plt.legend(bbox_to_anchor=(1, 1), 
+            loc='upper left', 
+            borderaxespad=0.)
+    plt.savefig("MDS_Country.png", bbox_inches="tight")
+    plt.show()

@@ -63,14 +63,31 @@ for col in vote_cols:
 #df = df.dropna(subset=["MEP_ID"])  # or any logic specific to your dataset
 
 # ----------------------------------------------------------------------
-# 4. Create vote matrix (N x M)
+# 4. Create vote matrix (N x M) and EPG/country lists
 # ----------------------------------------------------------------------
 
 key = keys[0]
+key_country = keys[5]
+key_epg = keys[7]
+
 mep_ids = df[key].unique()
+
+country_list = df[key_country].values
+epg_list = df[key_epg].values
+
+info_array = np.column_stack((country_list, epg_list))
+# Now info_array[i, 0] = country, info_array[i, 1] = epg for the i-th row (MEP).
+print(info_array.shape)  # should be (N, 2)
+print(info_array[:5]) 
 
 N = len(mep_ids)
 M = len(vote_cols)
+
+# create a csv for epgs and countries
+df_info = pd.DataFrame(info_array, index=mep_ids, columns=["Country", "EPG"])
+df_info.to_csv("MEP_info.csv")
+
+# Create the vote matrix (N x M)
 
 vote_matrix = np.zeros((N, M))
 for i, mep_id in enumerate(mep_ids):
